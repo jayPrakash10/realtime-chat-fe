@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+/*
+ * ChatNest design tokens. Every color, font size, radius and shadow used in the app comes from here.
+ * Tailwind's default palette is removed (--color-*: initial) so off-system colors can't sneak in.
+ */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --color-*: initial;
+  --color-white: #ffffff;
+
+  /* Brand (violet) */
+  --color-brand-50: #f3f3fe;
+  --color-brand-100: #e4e4fb;
+  --color-brand-200: #cdcdf7;
+  --color-brand-500: #6e6ee0;
+  --color-brand-600: #5b5bd6;
+  --color-brand-700: #4a4ac2;
+  --color-brand-800: #3d3da3;
+
+  /* Surfaces */
+  --color-app-bg: #ececf4;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f6fa;
+  --color-chat-bg: #f1f0f8;
+  --color-chat-dot: #dddcec;
+  --color-border: #e2e2ec;
+  --color-border-strong: #c9c9d8;
+  --color-skeleton: #e6e6ef;
+  --color-overlay: rgb(24 24 43 / 0.5);
+
+  /* Text */
+  --color-ink: #18182b;
+  --color-ink-secondary: #4e4e66;
+  --color-ink-meta: #5a5a75;
+
+  /* Status */
+  --color-tick-read: #0284c7;
+  --color-online: #16a34a;
+  --color-focus-ring: #5b5bd6;
+  --color-danger-50: #fef2f2;
+  --color-danger-400: #f87171;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-success-50: #f0fdf4;
+  --color-success-700: #15803d;
+  --color-warning-50: #fffbeb;
+  --color-warning-700: #b45309;
+
+  /* Avatar initials (background + text pairs, all AA) */
+  --color-avatar-1: #e4e4fb;
+  --color-avatar-1-ink: #3d3da3;
+  --color-avatar-2: #dcedf8;
+  --color-avatar-2-ink: #0b5a85;
+  --color-avatar-3: #e1f3e5;
+  --color-avatar-3-ink: #1f6b33;
+  --color-avatar-4: #fbe6db;
+  --color-avatar-4-ink: #8a3a12;
+  --color-avatar-5: #f5e0f2;
+  --color-avatar-5-ink: #7c2a72;
+
+  /* Type scale */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 0.875rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.3125rem;
+  --text-lg: 1.0625rem;
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.625rem;
+  --text-2xl--line-height: 2rem;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-bubble: 0 1px 0.5px rgb(24 24 43 / 0.13);
+  --shadow-card: 0 1px 3px rgb(24 24 43 / 0.08), 0 1px 2px rgb(24 24 43 / 0.06);
+  --shadow-pop: 0 8px 24px rgb(24 24 43 / 0.14);
+  --shadow-modal: 0 20px 48px rgb(24 24 43 / 0.22);
+
+  /* Layout widths */
+  --container-pane: 21.25rem;
+  --container-pane-lg: 23.75rem;
+  --container-panel: 22.5rem;
+  --container-auth: 26rem;
+  --container-content: 40rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-app-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .input {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    padding: 0 0.75rem;
+    font-size: var(--text-base);
+    color: var(--color-ink);
+    transition: border-color 150ms ease-out;
+  }
+
+  .input::placeholder {
+    color: var(--color-ink-meta);
+  }
+
+  .input:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .input:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 0;
+    border-color: transparent;
+  }
+
+  .input[aria-invalid="true"] {
+    border-color: var(--color-danger-600);
+  }
+
+  .input:disabled,
+  .input[readonly] {
+    background-color: var(--color-surface-muted);
+    color: var(--color-ink-secondary);
+  }
+
+  textarea.input {
+    height: auto;
+    min-height: 5rem;
+    padding: 0.5rem 0.75rem;
+    resize: vertical;
+  }
+
+  /* Subtle dotted wallpaper behind the conversation (no image asset). */
+  .chat-wallpaper {
+    background-color: var(--color-chat-bg);
+    background-image: radial-gradient(var(--color-chat-dot) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Bubble tails on the first message of a group. */
+  .bubble-tail-out::after,
+  .bubble-tail-in::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 8px;
+    height: 13px;
+    background: inherit;
+  }
+
+  .bubble-tail-out::after {
+    right: -8px;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+  }
+
+  .bubble-tail-in::after {
+    left: -8px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+
+  .dialog {
+    margin: auto;
+    width: min(100% - 2rem, var(--dialog-width, 24rem));
+    max-height: calc(100dvh - 2rem);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-modal);
+    padding: 0;
+  }
+
+  .dialog-sm {
+    --dialog-width: 24rem;
+  }
+
+  .dialog-md {
+    --dialog-width: 32rem;
+  }
+
+  .dialog-lg {
+    --dialog-width: 56rem;
+  }
+
+  .dialog::backdrop {
+    background-color: var(--color-overlay);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
